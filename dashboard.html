@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Dashboard</title>
+    <style>
+         body {
+            background-color: #36393F;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .bot-image {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 5px solid #FFD700;
+    }
+
+    .invite-button, .donate-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            position: absolute;
+        }
+
+        .invite-button {
+            background-color: #7289DA;
+            color: white;
+            top: 50%; /* Adjust the value to position the button in the middle */
+        }
+
+        .donate-button {
+            background-color: #d4af37; /* Gold color */
+            color: white;
+            top: 60%; /* Adjust the value to position the button below the "Invite Bot" button */
+        }
+
+        .hamburger-menu {
+    position: absolute;
+    top: 20px;
+    left: 20px; /* Change 'right' to 'left' to move it to the top left */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 31.5px; /* Increase the width by 5% */
+    height: 21px; /* Increase the height by 5% */
+    cursor: pointer;
+}
+
+.hamburger-menu span {
+    background-color: white;
+    height: 4.2px; /* Increase the height by 5% */
+    border-radius: 2px;
+}
+
+
+.nav-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 20px; /* Change 'right' to 'left' to move it to the top left */
+    background-color: #2C2F33;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+
+    .nav-menu.active {
+        display: block;
+    }
+
+    .nav-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-menu li {
+        padding: 10px 20px;
+        border-bottom: 1px solid #424549;
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .nav-menu a:hover {
+        color: #FFD700;
+    }
+    .splash-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFD700;
+  white-space: nowrap;
+  animation: splashTextAnimation 4s infinite;
+  transform-origin: 50% 50%;
+  margin-top: 10px; /* Add some margin on top to separate it from the bot image */
+}
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('guesspic/webBg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+
+@keyframes splashTextAnimation {
+  0% {
+    transform: translateY(-50%) translateX(-50%) rotate(30deg) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) translateX(-50%) rotate(30deg) scale(1.5);
+  }
+  100% {
+    transform: translateY(-50%) translateX(-50%) rotate(30deg) scale(1);
+  }
+}
+
+</style>
+<script>
+    function toggleMenu() {
+        const navMenu = document.querySelector('.nav-menu');
+        navMenu.classList.toggle('active');
+    }
+    var splashTexts = [
+    "Welcome to Misa Casino!",
+    "Collect Them All!",
+    "Top The Charts!",
+    "Riley Faucett was here",
+    "Just like Minecraft!",
+    "The Misa Casino is Under Construction.",
+    "Gamble Risk Free At the Misa Casino!",
+    "Welcome to Misa's Casino, I love you.",
+    "It changes?!",
+    "Misa Casino is always evolving!",
+    "The Misa Casino is here to stay!",
+    "It's the Misa Casino official website!",
+    "pls donate... i'll luv u 4ever..."
+    
+];
+function randomSplashText() {
+    var index = Math.floor(Math.random() * splashTexts.length);
+    return splashTexts[index];
+}
+function changeSplashText() {
+    document.querySelector('.splash-text').textContent = randomSplashText();
+}
+
+
+</script>
+</head>
+<body onload="changeSplashText()">
+    <div class="background-image"></div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="aboutMisa.html">About Bot</a></li>
+            <li><a href="Commands.html">Commands</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <img src="https://i.imgur.com/fgpVeNU.png" alt="Bot Image" class="bot-image">
+        <div class="splash-text">Welcome to Misa Casino!</div>
+        <a href="https://discordapp.com/api/oauth2/authorize?client_id=584160547272917015&permissions=8&scope=bot" class="invite-button">Invite Bot</a>
+        <a href="#" class="donate-button">Donate</a> <!-- Add your donation link here -->
+    </div>
+</body>
+</html>

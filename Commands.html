@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Commands</title>
+    <style>
+        body {
+            background-color: #2C2F33;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+        .hamburger-menu {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .hamburger-menu span {
+        background-color: white;
+        height: 4px;
+        border-radius: 2px;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #2C2F33;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .nav-menu.active {
+        display: block;
+    }
+
+    .nav-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-menu li {
+        padding: 10px 20px;
+        border-bottom: 1px solid #424549;
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .nav-menu a:hover {
+        color: #7289DA;
+    }
+    </style>
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('active');
+        }
+    </script>
+</head>
+
+<body>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="aboutMisa.html">About Bot</a></li>
+            <li><a href="Commands.html">Commands</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </nav>
+    <h1>Bot Commands</h1>
+    <div class="category">
+        <h2>General Commands</h2>
+        <ul>
+            <li>1. /give &lt;user&gt; &lt;amount&gt;: Give someone in need some of your hard earned tokens!</li>
+            <li>2. /ping: Check my ping to see if I'm lagging!</li>
+            <li>3. /level &lt;USER&gt;: This is where you can find what level someone else is at and how much XP they need until the next level. Mentioning no user will send your own.</li>
+            <li>4. /vault: Take a peak inside the casino's vault...</li>
+            <li>5. /pfp &lt;user&gt;: This shows your pfp or someone else's. Very useful tool</li>
+            <li>6. /summon &lt;user&gt;: Summon someone!</li>
+            <li>7. /servers: Get a list of servers I'm in to see how popular I am 😊</li>
+            <li>8. /invite: Sends a link you could use to invite me to other servers!</li>
+            <li>9. /say &lt;word/phrase&gt;: Make me say anything! *server restrictions apply*</li>
+            <li>10. /uptime: Shows how long I've been up and running!</li>
+        </ul>
+    </div>
+    <!-- Add more categories similarly -->
+    <div class="category">
+        <h2>Fun and Interaction Commands</h2>
+        <ul>
+            <li>1. /hug &lt;user&gt;: Make me hug someone &lt;3</li>
+            <li>2. /play &lt;youtube link&gt;: DO NOT USE. COMMAND BROKEN CURRENTLY</li>
+            <li>3. /luckyaura: Sends a link to my home server!</li>
+            <li>4. /pat &lt;user&gt;: Pat someone on the head uwu</li>
+            <li>5. /hit &lt;user&gt;: Hit someone!</li>
+            <li>6. /slap &lt;user&gt;: Slap someone!</li>
+            <li>7. /rob: Try to rob the vault!</li>
+            <li>8. /kiss &lt;user&gt;: Kiss someone in the chat uwu</li>
+            <li>9. /8ball &lt;question&gt;: For a small price, ask all-knowing Misa a question, and answer she shall.</li>
+            <li>10. /blaze &lt;user&gt;: 420 blaze it up</li>
+            <li>11. /kill &lt;user&gt;: Order me to commit a homicide :evil_grin_emote:</li>
+        </ul>
+    </div>
+
+    <div class="category">
+        <h2>Games and Gambling Commands</h2>
+        <ul>
+            <li>1. /gamble: Basic casino command, earn some cash!</li>
+            <li>2. /trade &lt;character card&gt;: Trade any card from your deck with someone else's!</li>
+            <li>3. /dm &lt;user&gt; &lt;message&gt;: Sends a message to the user *user must have DMs enabled*</li>
+            <li>4. /view &lt;#&gt; or &lt;character name&gt;: View a Highly Valuable Character Card's info that you own!</li>
+        </ul>
+    </div>
+
+    <div class="category">
+        <h2>Additional Games and Casino Commands</h2>
+        <ul>
+            <li>1. /taboo: Guess the word or phrase from Misa's clues!</li>
+            <li>2. /daily: Receive a reward every 24 hours!</li>
+            <li>3. /slots &lt;bet&gt;: Bet to potentially triple your tokens!</li>
+            <li>4. /inventory: Check out your perks!</li>
+            <li>5. /build: Build the wall to earn some tokens!</li>
+            <li>6. /wall: How big is the server's wall?</li>
+            <li>7. /shop: Enter the shop to spend LuckyTokens!</li>
+            <li>8. /leaderboard: Can also use .lb to view the leaderboard</li>
+            <li>9. /type: Be the first to type a word to win tokens!</li>
+            <li>10. /guess: Be the first to guess the image of the character to win tokens!</li>
+        </ul>
+    </div>
+    <div class="category">
+        <h2>Miscellaneous Commands</h2>
+        <ul>
+            <li>1. /give &lt;user&gt; &lt;amount&gt;: Give someone in need some of your hard-earned tokens!</li>
+            <li>2. /ping: Check my ping to see if I'm lagging!</li>
+            <li>3. /level &lt;USER&gt;: Find what level someone else is at and how much XP they need until the next level. Mentioning no user will send your own.</li>
+            <li>4. /vault: Take a peek inside the casino's vault...</li>
+            <li>5. /pfp &lt;user&gt;: This shows your pfp or someone else's. Very useful tool</li>
+            <li>6. /summon &lt;user&gt;: Summon someone!</li>
+            <li>7. /servers: Get a list of servers I'm in to see how popular I am 😊</li>
+            <li>8. /invite: Sends a link you could use to invite me to other servers!</li>
+            <li>9. /say &lt;word/phrase&gt;: Make me say anything! *server restrictions apply*</li>
+            <li>10. /uptime: Shows how long I've been up and running!</li>
+        </ul>
+    </div>
+    
+
+</body>
+
+</html>

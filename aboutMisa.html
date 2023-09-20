@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Bot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('guesspic/casino_floor_misa1.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            font-family: 'Roboto Slab', serif;
+            color: #FFD700;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .about-bot {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .about-bot h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .hamburger-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .hamburger-menu span {
+            background-color: white;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background-color: #2C2F33;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .nav-menu.active {
+            display: block;
+        }
+
+        .nav-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #424549;
+        }
+
+        .nav-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-menu a:hover {
+            color: #7289DA;
+        }
+
+        .img-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .img-item {
+            position: relative;
+            width: 20%;
+        }
+
+        .img-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .img-item label {
+            display: block;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .img-text {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+            padding: 10px;
+            border-radius: 10px;
+            width: 200px;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 18px;
+            line-height: 1.5;
+        }
+    </style>
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('active');
+        }
+
+        function showTextBox(e) {
+            const textBox = e.target.nextElementSibling;
+            textBox.style.display = 'block';
+        }
+
+        function hideTextBox(e) {
+            const textBox = e.target.nextElementSibling;
+            textBox.style.display = 'none';
+        }
+
+        window.onload = function() {
+            const images = document.querySelectorAll('.img-item img');
+            images.forEach(img => {
+                img.addEventListener('mouseover', showTextBox);
+                img.addEventListener('mouseout', hideTextBox);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="aboutMisa.html">About Bot</a></li>
+            <li><a href="Commands.html">Commands</a></li>
+            <li><a href="#settings">Settings</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="about-bot">
+            <h1>Welcome to the Misa Casino!</h1>
+            <p>This is the most in-depth and unique casino themed bot on Discord! Not only do I have more casino games than most on the market, but I will also provide a unique deck of character cards to each server for players to collect! Race to collect all of your favorite characters before your opponents get them first and sell them for higher!</p>
+            <p>Not to mention, I even provide players with achievements they can work toward to earn badges on their customizable profiles! On top of all that, last but not least, I have been developed, bot, website, and all, solely by one man, Riley Faucett. This may also be a major contributing reason to what's allowed me to maintain my personality as the quirkiest Casino Runner around!</p>
+        </div>
+        <div class="img-container">
+            <div class="img-item">
+                <img src="guesspic/MasterBuilder.png" alt="Master Builder">
+                <label>Master Builder</label>
+                <div class="img-text">
+                    <p>This is the Master Builder.</p>
+                </div>
+            </div>
+            <div class="img-item">
+                <img src="guesspic/FavChar_badge.png" alt="Favorite Character Badge">
+                <label>Favorite Character Badge</label>
+                <div class="img-text">
+                    <p>This is the Favorite Character Badge.</p>
+                </div>
+            </div>
+            <div class="img-item">
+                <img src="guesspic/CharCards.png" alt="Character Cards">
+                <label>Character Cards</label>
+                <div class="img-text">
+                    <p>These are the Character Cards.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
