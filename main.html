@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Bot Dashboard</title>
@@ -110,6 +111,20 @@
   transform-origin: 50% 50%;
   margin-top: 10px; /* Add some margin on top to separate it from the bot image */
 }
+        .discord-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #7289da;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .background-image {
     position: absolute;
     top: 0;
@@ -188,6 +203,9 @@ function changeSplashText() {
     <div class="container">
         <img src="https://i.imgur.com/fgpVeNU.png" alt="Bot Image" class="bot-image">
         <div class="splash-text">Welcome to Misa Casino!</div>
+        <a href="https://discord.com/api/oauth2/authorize?client_id=584160547272917015&redirect_uri=https://luckyaura.github.io/MisaCasino/main.html&response_type=code&scope=identify%20email" class="discord-button">
+    <i class="fab fa-discord"></i> Login with Discord
+</a>
         <a href="https://discordapp.com/api/oauth2/authorize?client_id=584160547272917015&permissions=8&scope=bot" class="invite-button">Invite Bot</a>
         <a href="https://venmo.com/u/RedKira" class="donate-button" target="_blank">Donate</a>
     </div>
