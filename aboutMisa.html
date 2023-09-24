@@ -149,22 +149,22 @@
         }
 
         function showTextBox(e) {
-            const textBox = e.target.nextElementSibling;
-            textBox.style.display = 'block';
-        }
+        const textBox = e.currentTarget.querySelector('.img-text');
+        textBox.style.display = 'block';
+    }
 
-        function hideTextBox(e) {
-            const textBox = e.target.nextElementSibling;
-            textBox.style.display = 'none';
-        }
+    function hideTextBox(e) {
+        const textBox = e.currentTarget.querySelector('.img-text');
+        textBox.style.display = 'none';
+    }
 
-        window.onload = function() {
-            const images = document.querySelectorAll('.img-item img');
-            images.forEach(img => {
-                img.addEventListener('mouseover', showTextBox);
-                img.addEventListener('mouseout', hideTextBox);
-            });
-        }
+    window.onload = function() {
+        const imgItems = document.querySelectorAll('.img-item');
+        imgItems.forEach(item => {
+            item.addEventListener('mouseover', showTextBox);
+            item.addEventListener('mouseout', hideTextBox);
+        });
+    }
     </script>
 </head>
 <body>
