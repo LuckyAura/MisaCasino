@@ -118,18 +118,31 @@
     display: none;
     position: absolute;
     background-color: #2B2E32; /* Darker shade of #36393F */
-    background-image: url('https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/webBg.png');
-    background-size: cover;
-    background-repeat: no-repeat;
     color: #FFD700;
     padding: 10px;
     border-radius: 10px;
-    width: 300px; /* Increased width by 100px */
+    width: 350px; /* Increased width by 100px */
     left: 50%;
-    bottom: -50px; /* Lowered position */
+    bottom: -80px; /* Lowered position */
     transform: translateX(-50%);
     font-size: 18px;
     line-height: 1.5;
+    overflow: hidden; /* Hide any overflow */
+    z-index: 1; /* Ensure this element is above the pseudo-element */
+}
+
+.img-text::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/webBg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.2; /* Lowered opacity of background image */
+    z-index: -1; /* Ensure this pseudo-element is below the text */
 }
         .background-image {
     position: absolute;
