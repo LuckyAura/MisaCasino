@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/GoldenLogo.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Dashboard</title>
+    <style>
+         body {
+            background-color: #36393F;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .bot-image {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 5px solid #FFD700;
+    }
+
+    .chat-container {
+            margin-top: 30px;
+            width: 80%;
+            background-color: #2C2F33;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .chat-area {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 1px solid #424549;
+            margin-bottom: 10px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #7289DA;
+            color: white;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #d4af37;
+            color: white;
+        }
+        .input-area {
+            display: flex;
+            justify-content: space-between;
+        }
+        .input-area input {
+            width: 85%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        .input-area button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #7289DA;
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .hamburger-menu {
+    position: absolute;
+    top: 20px;
+    left: 20px; /* Change 'right' to 'left' to move it to the top left */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 31.5px; /* Increase the width by 5% */
+    height: 21px; /* Increase the height by 5% */
+    cursor: pointer;
+}
+
+.hamburger-menu span {
+    background-color: white;
+    height: 4.2px; /* Increase the height by 5% */
+    border-radius: 2px;
+}
+
+
+.nav-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 20px; /* Change 'right' to 'left' to move it to the top left */
+    background-color: #2C2F33;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+
+    .nav-menu.active {
+        display: block;
+    }
+
+    .nav-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-menu li {
+        padding: 10px 20px;
+        border-bottom: 1px solid #424549;
+    }
+
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-menu a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .nav-menu a:hover {
+        color: #FFD700;
+    }
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/webBg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+
+</style>
+<script>
+    function toggleMenu() {
+        const navMenu = document.querySelector('.nav-menu');
+        navMenu.classList.toggle('active');
+    }
+    function sendMessage() {
+            var chatArea = document.getElementById('chatArea');
+            var userInput = document.getElementById('userInput');
+            var messageText = userInput.value;
+            userInput.value = '';  // clear the input box
+            if(messageText.trim() !== '') {  // don't send empty messages
+                var userMessageElement = document.createElement('div');
+                userMessageElement.classList.add('chat-message', 'user-message');
+                userMessageElement.textContent = messageText;
+                chatArea.appendChild(userMessageElement);
+
+                // Simulate a bot response
+                setTimeout(function() {
+                    var botResponseText = getBotResponse(messageText);
+                    var botMessageElement = document.createElement('div');
+                    botMessageElement.classList.add('chat-message', 'bot-message');
+                    botMessageElement.textContent = botResponseText;
+                    chatArea.appendChild(botMessageElement);
+                    chatArea.scrollTop = chatArea.scrollHeight;  // scroll to the bottom
+                }, 1000);  // wait 1 second before showing bot response
+            }
+        }
+
+        function getBotResponse(messageText) {
+            // Here is where you could define a set of responses based on the input text
+            var lowerCaseText = messageText.toLowerCase();
+            if(lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
+                return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜';
+            } else if(lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
+                return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
+            } else if(lowerCaseText.includes('/help')) {
+                return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
+            }
+            else {
+                return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
+            }
+        }
+
+</script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-area" id="chatArea"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Talk to Misa!">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    <div class="background-image"></div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="main.html">Home</a></li>
+            <li><a href="aboutMisa.html">About Bot</a></li>
+            <li><a href="Commands.html">Commands</a></li>
+            <li><a href="chat.html">Misa Casino Demo</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <img src="https://i.imgur.com/fgpVeNU.png" alt="Bot Image" class="bot-image">
+        <a href="https://discord.com/api/oauth2/authorize?client_id=584160547272917015&redirect_uri=https://luckyaura.github.io/MisaCasino/main.html&response_type=code&scope=identify%20email" class="discord-button">
+    <i class="fab fa-discord"></i> Login with Discord
+</a>
+        
+    </div>
+</body>
+</html>
