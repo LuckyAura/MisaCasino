@@ -166,7 +166,7 @@
         const navMenu = document.querySelector('.nav-menu');
         navMenu.classList.toggle('active');
     }
-    async function sendMessage() {
+async function sendMessage() {
     var chatArea = document.getElementById('chatArea');
     var userInput = document.getElementById('userInput');
     var messageText = userInput.value;
@@ -178,11 +178,11 @@
         chatArea.appendChild(userMessageElement);
 
         // Simulate a bot response
-        setTimeout(async function() {  // Make this function async
+        setTimeout(async function() {  // Keep this function async
             var botResponseText = await getBotResponse(messageText);  // Use await here
             var botMessageElement = document.createElement('div');
             botMessageElement.classList.add('chat-message', 'bot-message');
-            botMessageElement.textContent = botResponseText;
+            botMessageElement.innerHTML = botResponseText;  // Change textContent to innerHTML
             chatArea.appendChild(botMessageElement);
             chatArea.scrollTop = chatArea.scrollHeight;  // scroll to the bottom
         }, 1000);  // wait 1 second before showing bot response
