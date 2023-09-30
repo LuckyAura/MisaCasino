@@ -280,17 +280,19 @@ async function getBotResponse(messageText) {
 
         var lowerCaseText = messageText.toLowerCase();
         if (lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
-            return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜';
+            return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜 This version of me mainly serves as a tutorial bot. I demo a couple of common functions, and do a couple of other fun things. You can use "/help" to see what else you can do with me.';
         } else if (lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
             return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
         } else if (lowerCaseText.includes('/help')) {
-            return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
+            return 'Here is a list of commands & talking points!<br>- Try saying hi to me!<br>- Try asking how I\'m doing!<br>- /build (coming soon)<br>- /profile';
         } else if (lowerCaseText.includes('/profile')) {
-            // Await the result of fetchUserData and return it
-            const userData = await fetchUserData(userId);
-            const responseMessage = `${username}'s balance is: ${userData.balance}, and ${username}'s level is: ${userData.level}`;
-            return responseMessage;
-        } else {
+    // Await the result of fetchUserData and return it
+    const userData = await fetchUserData(userId);
+    const roundedBalance = Math.round(userData.balance);
+    const responseMessage = `${username}'s balance is: ${roundedBalance} <br> and <br> ${username}'s level is: ${userData.level}`;
+    return responseMessage;
+}
+ else {
             return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
         }
     }
