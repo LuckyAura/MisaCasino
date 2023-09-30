@@ -233,22 +233,38 @@ getAccessToken(authorizationCode)
 });
 
 
-    async function fetchUserData(userId) {
+async function fetchUserData(userId) {
     // Assume the URLs of your JSON files on GitHub are as follows:
     const xpUrl = 'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/xp.json';
     const wordsUrl = 'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/words.json';
 
-    // Fetch the JSON data from GitHub
-    const xpResponse = await fetch(xpUrl);
-    const wordsResponse = await fetch(wordsUrl);
-    const xpData = await xpResponse.json();
-    const wordsData = await wordsResponse.json();
+    try {
+        // Fetch the JSON data from GitHub
+        const xpResponse = await fetch(xpUrl);
+        const wordsResponse = await fetch(wordsUrl);
 
-    // Find the user's data based on their Discord ID
-    const userXpData = xpData[userId];
-    const userWordsData = wordsData[userId];
+        // Check if the responses are ok
+        if (!xpResponse.ok || !wordsResponse.ok) {
+            throw new Error(`Failed to fetch data: ${xpResponse.statusText}, ${wordsResponse.statusText}`);
+        }
 
-    return { balance: userWordsData.balance, level: userXpData.level };
+        const xpData = await xpResponse.json();
+        const wordsData = await wordsResponse.json();
+
+        // Find the user's data based on their Discord ID
+        const userXpData = xpData[userId];
+        const userWordsData = wordsData[userId];
+
+        // Check if the user data exists
+        if (!userXpData || !userWordsData) {
+            throw new Error(`User data not found for user ID: ${userId}`);
+        }
+
+        return { balance: userWordsData.balance, level: userXpData.level };
+    } catch (error) {
+        console.error('Error fetching user data:', error.message);
+        return { balance: 'Error', level: 'Error' };  // Or however you want to handle errors
+    }
 }
 
 async function getBotResponse(messageText) {
