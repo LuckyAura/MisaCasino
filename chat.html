@@ -258,22 +258,20 @@ getAccessToken(authorizationCode)
         return 'Please login to Discord before trying me out!';
     }
             var lowerCaseText = messageText.toLowerCase();
-            if(lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
-                return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜';
-            } else if(lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
-                return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
-            } else if(lowerCaseText.includes('/help')) {
-                return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
-            } else if(lowerCaseText.includes('/profile')) {
-        fetchUserData(userId).then(userData => {
+    if(lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
+        return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜';
+    } else if(lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
+        return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
+    } else if(lowerCaseText.includes('/help')) {
+        return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
+    } else if(lowerCaseText.includes('/profile')) {
+        return fetchUserData(userId).then(userData => {
             var responseMessage = `${username}'s balance is: ${userData.balance}, and ${username}'s level is: ${userData.level}`;
-            // Here, you should return the responseMessage so that it gets displayed to the user
             return responseMessage;
         });
+    } else {
+        return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
     }
-            else {
-                return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
-            }
         }
 
 </script>
