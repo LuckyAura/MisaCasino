@@ -188,6 +188,23 @@
                 }, 1000);  // wait 1 second before showing bot response
             }
         }
+    async function fetchUserData(userId) {
+    // Assume the URLs of your JSON files on GitHub are as follows:
+    const xpUrl = 'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/xp.json';
+    const wordsUrl = 'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/words.json';
+
+    // Fetch the JSON data from GitHub
+    const xpResponse = await fetch(xpUrl);
+    const wordsResponse = await fetch(wordsUrl);
+    const xpData = await xpResponse.json();
+    const wordsData = await wordsResponse.json();
+
+    // Find the user's data based on their Discord ID
+    const userXpData = xpData[userId];
+    const userWordsData = wordsData[userId];
+
+    return { balance: userWordsData.balance, level: userXpData.level };
+}
 
         function getBotResponse(messageText) {
             // Here is where you could define a set of responses based on the input text
@@ -198,8 +215,12 @@
                 return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
             } else if(lowerCaseText.includes('/help')) {
                 return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
-            }
-            else {
+            } else if(lowerCaseText.includes('/profile'){
+                fetchUserData(userId).then(userData => {
+            var responseMessage = `${userId}'s balance is: ${userData.balance}, and ${userId}'s level is: ${userData.level}`;
+            // Return this message as the bot's response
+            // Note: Since fetchUserData is asynchronous, you'll need to handle this promise accordingly
+            }else {
                 return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
             }
         }
