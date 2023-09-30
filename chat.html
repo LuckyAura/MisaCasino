@@ -188,6 +188,52 @@
                 }, 1000);  // wait 1 second before showing bot response
             }
         }
+    const urlParams = new URLSearchParams(window.location.search);
+    const authorizationCode = urlParams.get('code');
+    // This should be done server-side to keep the client secret secure
+function getAccessToken(authorizationCode) {
+    const params = new URLSearchParams();
+    params.append('client_id', '584160547272917015');
+    // Your client secret should be kept secure
+    params.append('client_secret', 'OwPRhZar_n2XfYez2Vfg5BuEnu9gqFUd');
+    params.append('grant_type', 'authorization_code');
+    params.append('code', authorizationCode);
+    params.append('redirect_uri', 'https://luckyaura.github.io/MisaCasino/chat.html');
+
+    return fetch('https://discord.com/api/v8/oauth2/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
+    })
+    .then(response => response.json())
+    .then(data => data.access_token);
+}
+
+function getDiscordUser(accessToken) {
+    return fetch('https://discord.com/api/v8/users/@me', {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+    .then(response => response.json());
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const authorizationCode = urlParams.get('code');
+
+let userId;
+let username;
+
+getAccessToken(authorizationCode)
+.then(accessToken => getDiscordUser(accessToken))
+.then(user => {
+    userId = user.id;
+    username = user.username;
+});
+
+
     async function fetchUserData(userId) {
     // Assume the URLs of your JSON files on GitHub are as follows:
     const xpUrl = 'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/xp.json';
@@ -207,7 +253,10 @@
 }
 
         function getBotResponse(messageText) {
-            // Here is where you could define a set of responses based on the input text
+             // Check if user is logged in
+    if (!userId) {
+        return 'Please login to Discord before trying me out!';
+    }
             var lowerCaseText = messageText.toLowerCase();
             if(lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
                 return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜';
@@ -215,12 +264,14 @@
                 return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
             } else if(lowerCaseText.includes('/help')) {
                 return 'Here is a list of commands & talking points!\n- Try saying hi to me!\n- Try asking how I\'m doing!\n- /fish (coming soon)';
-            } else if(lowerCaseText.includes('/profile'){
-                fetchUserData(userId).then(userData => {
-            var responseMessage = `${userId}'s balance is: ${userData.balance}, and ${userId}'s level is: ${userData.level}`;
-            // Return this message as the bot's response
-            // Note: Since fetchUserData is asynchronous, you'll need to handle this promise accordingly
-            }else {
+            } else if(lowerCaseText.includes('/profile')) {
+        fetchUserData(userId).then(userData => {
+            var responseMessage = `${username}'s balance is: ${userData.balance}, and ${username}'s level is: ${userData.level}`;
+            // Here, you should return the responseMessage so that it gets displayed to the user
+            return responseMessage;
+        });
+    }
+            else {
                 return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
             }
         }
