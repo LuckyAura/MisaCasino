@@ -840,28 +840,31 @@ var characterCode = Object.keys(cardSetDict).find(code => cardSetDict[code].name
     
     // Process a guess
     if (lowerCaseText.startsWith('/guess ')) {
-        // Ensure a game is ongoing
-        var game = ongoingGames[userId];
-        if (!game) {
-            return 'No ongoing game. Start a new game with /guess.';
-        }
-        
-        // Update the guess count
-        game.guessCount++;
-        
-        // Check the user's guess
-        var userGuess = lowerCaseText.split(' ')[1];  // Assuming the guess is one word
-        if (userGuess && game.character.includes(userGuess)) {
-            var elapsedTime = ((new Date()) - game.startTime) / 1000;  // Time in seconds
-            // Optionally, store the point for the user
-            // ...
-            // End the game for this user
-            delete ongoingGames[userId];
-            return `Congratulations! You guessed it in ${game.guessCount} guesses and ${elapsedTime.toFixed(2)} seconds.`;
-        } else {
-            return 'Incorrect guess. Try again!';
-        }
-    } 
+    // Ensure a game is ongoing
+    var game = ongoingGames[userId];
+    if (!game) {
+        return 'No ongoing game. Start a new game with /guess.';
+    }
+    
+    // Update the guess count
+    game.guessCount++;
+    
+    // Check the user's guess
+    var userGuess = lowerCaseText.split(' ')[1];  // Assuming the guess is one word
+    if (userGuess && game.character.includes(userGuess)) {
+        var elapsedTime = ((new Date()) - game.startTime) / 1000;  // Time in seconds
+        // Optionally, store the point for the user
+        // ...
+        // End the game for this user
+        delete ongoingGames[userId];
+        return `Congratulations! You guessed ${game.character} correctly in ${game.guessCount} guesses and ${elapsedTime.toFixed(2)} seconds.`;
+    } else {
+        // Provide a hint with a random letter from the character's name
+        var randomIndex = Math.floor(Math.random() * game.character.length);
+        var hintLetter = game.character[randomIndex];
+        return `Incorrect guess. Try again! Hint: This character's name contains the letter '${hintLetter}'.`;
+    }
+}
  else {
             return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
         }
