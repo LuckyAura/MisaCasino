@@ -162,6 +162,7 @@
 
 </style>
 <script>
+    var ongoingGames = {};
     const cardSetDict = {
   '8k6kz3T': {name:'Starfire', series: 'Teen Titans'},
   '9x74tsn': {name: 'Raven', series: 'Teen Titans'},
@@ -818,6 +819,47 @@ var characterCode = Object.keys(cardSetDict).find(code => cardSetDict[code].name
             return `https://i.imgur.com/${characterCode}.png`;
         } else {
             return 'Sorry, I couldn\'t find that character. Please try again!';
+        }
+    } // Start a new game
+    if (lowerCaseText.includes('/guess')) {
+        // Select a random character from cardSetDict
+        var characterCodes = Object.keys(cardSetDict);
+        var randomCharacterCode = characterCodes[Math.floor(Math.random() * characterCodes.length)];
+        var randomCharacter = cardSetDict[randomCharacterCode];
+        
+        // Store the game state for this user
+        ongoingGames[userId] = {
+            character: randomCharacter.name.toLowerCase(),
+            startTime: new Date(),
+            guessCount: 0
+        };
+        
+        // Return the image URL of the random character
+        return `https://i.imgur.com/${randomCharacterCode}.png`;
+    }
+    
+    // Process a guess
+    if (lowerCaseText.startsWith('/guess ')) {
+        // Ensure a game is ongoing
+        var game = ongoingGames[userId];
+        if (!game) {
+            return 'No ongoing game. Start a new game with /guess.';
+        }
+        
+        // Update the guess count
+        game.guessCount++;
+        
+        // Check the user's guess
+        var userGuess = lowerCaseText.split(' ')[1];  // Assuming the guess is one word
+        if (userGuess && game.character.includes(userGuess)) {
+            var elapsedTime = ((new Date()) - game.startTime) / 1000;  // Time in seconds
+            // Optionally, store the point for the user
+            // ...
+            // End the game for this user
+            delete ongoingGames[userId];
+            return `Congratulations! You guessed it in ${game.guessCount} guesses and ${elapsedTime.toFixed(2)} seconds.`;
+        } else {
+            return 'Incorrect guess. Try again!';
         }
     } 
  else {
