@@ -865,36 +865,38 @@ var characterCode = Object.keys(cardSetDict).find(code => cardSetDict[code].name
         return `Incorrect guess. Try again! Hint: This character's name contains the letter '${hintLetter}'.`;
     }
 } else if (lowerCaseText == '/browse') {
-        // Extract unique series from cardSetDict
-        var seriesSet = new Set();
-        Object.keys(cardSetDict).forEach(code => {
-            seriesSet.add(cardSetDict[code].series);
-        });
-        
-        // Convert Set to Array, then join with line breaks to create the response message
-        var uniqueSeriesList = Array.from(seriesSet).join('<br>');
-        return uniqueSeriesList;
-    } else if (lowerCaseText.startsWith('/series ')) {
-        // Extract the series name from the message
-        var seriesName = messageText.slice(8);  // Remove '/series ' from the start
-        
-        // Find all characters from this series
-        var charactersInSeries = [];
-        Object.keys(cardSetDict).forEach(code => {
-            if (cardSetDict[code].series.toLowerCase() === seriesName.toLowerCase()) {
-                charactersInSeries.push(cardSetDict[code].name);
-            }
-        });
-        
-        // Check if any characters were found
-        if (charactersInSeries.length > 0) {
-            // Join the character names with line breaks to create the response message
-            var characterList = charactersInSeries.join('<br>');
-            return characterList;
-        } else {
-            return `No characters found for the series "${seriesName}".`;
+    // Extract unique series from cardSetDict
+    var seriesSet = new Set();
+    Object.keys(cardSetDict).forEach(code => {
+        seriesSet.add(cardSetDict[code].series);
+    });
+    
+    // Convert Set to Array, then create list items and wrap in a <ul> tag
+    var uniqueSeriesList = Array.from(seriesSet).map(series => `<li>${series}</li>`).join('');
+    var bulletedList = `<ul>${uniqueSeriesList}</ul>`;
+    return bulletedList;
+} 
+else if (lowerCaseText.startsWith('/series ')) {
+    // Extract the series name from the message
+    var seriesName = messageText.slice(8);  // Remove '/series ' from the start
+    
+    // Find all characters from this series
+    var charactersInSeries = [];
+    Object.keys(cardSetDict).forEach(code => {
+        if (cardSetDict[code].series.toLowerCase() === seriesName.toLowerCase()) {
+            charactersInSeries.push(cardSetDict[code].name);
         }
+    });
+    
+    // Check if any characters were found
+    if (charactersInSeries.length > 0) {
+        // Create list items and wrap in a <ul> tag
+        var characterListItems = charactersInSeries.map(character => `<li>${character}</li>`).join('');
+        var characterList = `<ul>${characterListItems}</ul>`;
+        return characterList;
     }
+}
+
  else {
             return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
         }
