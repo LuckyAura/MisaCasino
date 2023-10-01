@@ -688,7 +688,7 @@ async function sendMessage() {
             var botMessageElement = document.createElement('div');
             botMessageElement.classList.add('chat-message', 'bot-message');
             
-            if (messageText.toLowerCase().includes('/check test') && typeof botResponse === 'string' && botResponse.startsWith('http')) {
+            if (messageText.toLowerCase().includes('/check ') && typeof botResponse === 'string' && botResponse.startsWith('http')) {
                 // Create an image element if it's the /check test command
                 var imgElement = document.createElement('img');
                 imgElement.src = botResponse;
