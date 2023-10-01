@@ -821,7 +821,7 @@ var characterCode = Object.keys(cardSetDict).find(code => cardSetDict[code].name
             return 'Sorry, I couldn\'t find that character. Please try again!';
         }
     } // Start a new game
-    if (lowerCaseText.includes('/guess')) {
+    if (lowerCaseText == '/guess') {
         // Select a random character from cardSetDict
         var characterCodes = Object.keys(cardSetDict);
         var randomCharacterCode = characterCodes[Math.floor(Math.random() * characterCodes.length)];
