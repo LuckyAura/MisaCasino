@@ -794,7 +794,7 @@ async function getBotResponse(messageText) {
         }
 
         var lowerCaseText = messageText.toLowerCase();
-        if (lowerCaseText.includes('hello') || lowerCaseText.includes('hi') || lowerCaseText.includes('sup') || lowerCaseText.includes('greetings')) {
+        if (lowerCaseText.startsWith('hello') || lowerCaseText.startsWith('hi') || lowerCaseText.startsWith('sup ') || lowerCaseText.startsWith('greetings ')) {
             return 'Hiii ^-^ I\'m Misa! I\'m the owner of this casino and I can\'t wait to foster your new gambling addictions 💜 This version of me mainly serves as a tutorial bot. I demo a couple of common functions, and do a couple of other fun things. You can use "/help" to see what else you can do with me.';
         } else if (lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
             return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
