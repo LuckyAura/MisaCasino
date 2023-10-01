@@ -785,7 +785,28 @@ async function fetchUserData(userId) {
     }
 }
 
+var userMessageElement = document.createElement('div');
+userMessageElement.classList.add('chat-message', 'user-message');
+var userLabelElement = document.createElement('div');
+userLabelElement.classList.add('chat-label');
+userLabelElement.textContent = username;  // Assuming 'username' variable holds the user's name
+userMessageElement.appendChild(userLabelElement);
+var userTextElement = document.createElement('div');
+userTextElement.textContent = messageText;
+userMessageElement.appendChild(userTextElement);
+chatArea.appendChild(userMessageElement);
 
+// Bot message element creation
+var botMessageElement = document.createElement('div');
+botMessageElement.classList.add('chat-message', 'bot-message');
+var botLabelElement = document.createElement('div');
+botLabelElement.classList.add('chat-label');
+botLabelElement.textContent = 'Misa';
+botMessageElement.appendChild(botLabelElement);
+var botTextElement = document.createElement('div');
+botTextElement.innerHTML = botResponseText;  // Changed to innerHTML to allow HTML formatting in bot responses
+botMessageElement.appendChild(botTextElement);
+chatArea.appendChild(botMessageElement);
 
 async function getBotResponse(messageText) {
         // Check if user is logged in
