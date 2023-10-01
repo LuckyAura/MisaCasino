@@ -291,6 +291,8 @@ async function getBotResponse(messageText) {
     const roundedBalance = Math.round(userData.balance);
     const responseMessage = `${username}'s balance is: ${roundedBalance} <br> and <br> ${username}'s level is: ${userData.level}`;
     return responseMessage;
+} else if (lowerCaseText.includes('/check test')){
+      return 'https://i.imgur.com/6OL0iew.png'      
 }
  else {
             return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
