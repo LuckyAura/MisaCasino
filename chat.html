@@ -672,7 +672,11 @@
 'VHh3OFn': {name: 'Shadow Weaver', series: 'She-Ra & the Princesses of Power'},
 'fC4uJvr': {name: 'Young King Micah', series: 'She-Ra & the Princesses of Power'}
 };
-
+var audioFiles = [
+    'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/',
+    'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/'
+    
+];
     function toggleMenu() {
         const navMenu = document.querySelector('.nav-menu');
         navMenu.classList.toggle('active');
@@ -711,6 +715,14 @@ async function sendMessage() {
     }
 }
 
+function playRandomAudio() {
+    var randomIndex = Math.floor(Math.random() * audioFiles.length);
+    var audioSrc = audioFiles[randomIndex];
+
+    var audioElement = document.createElement('audio');
+    audioElement.src = audioSrc;
+    audioElement.play();
+}
     
 function getAccessToken(authorizationCode) {
     const params = new URLSearchParams();
@@ -923,7 +935,10 @@ else if (lowerCaseText.startsWith('/series ')) {
         var characterList = `<ul>${characterListItems}</ul>`;
         return characterList;
     }
-}
+} else if (lowerCaseText === '/play') {
+        playRandomAudio();
+        return 'Here is a lil tune you might like 😊';
+    }
 
  else {
             return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
