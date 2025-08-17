@@ -24,6 +24,25 @@
         border-radius: 50%;
         border: 5px solid #FFD700;
     }
+    .loading-indicator {
+    display: none;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.loading-gif {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.loading-text {
+    color: #FFD700;
+    font-size: 14px;
+    margin-top: 5px;
+    font-style: italic;
+}
 
   .chat-container {
     width: 90%;  /* Adjusted from 100% to 90% */
@@ -801,7 +820,9 @@
 'bZOvq0T': {name: 'Beniko Yamaoka', series: "The Junji Ito Collection"},
 'o9R9V6t': {name: 'Izumi Murakami', series: "The Junji Ito Collection"}
 };
-
+// Global variables for processing state
+var isProcessing = false;
+var interest = {}; // You may want to load this from localStorage or your backend
 var audioFiles = [
     'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/onlymp3.to - Zelda Main Theme Song-cGufy1PAeTU-192k-1691366010.mp3',
     'https://raw.githubusercontent.com/LuckyAura/MisaCasino/main/Coco - Pewdiepie (preservation).mp3'
@@ -811,39 +832,89 @@ var audioFiles = [
         const navMenu = document.querySelector('.nav-menu');
         navMenu.classList.toggle('active');
     }
+/ Modified sendMessage function
 async function sendMessage() {
     var chatArea = document.getElementById('chatArea');
     var userInput = document.getElementById('userInput');
+    var loadingIndicator = document.getElementById('loadingIndicator');
     var messageText = userInput.value;
-    userInput.value = '';  // clear the input box
-    if (messageText.trim() !== '') {  // don't send empty messages
+    userInput.value = '';
+
+    if (messageText.trim() !== '') {
+        // Add user message
         var userMessageElement = document.createElement('div');
         userMessageElement.classList.add('chat-message', 'user-message');
-        userMessageElement.textContent = messageText;
+        var userLabelElement = document.createElement('div');
+        userLabelElement.classList.add('chat-label');
+        userLabelElement.textContent = username || 'You';
+        userMessageElement.appendChild(userLabelElement);
+        var userTextElement = document.createElement('div');
+        userTextElement.textContent = messageText;
+        userMessageElement.appendChild(userTextElement);
         chatArea.appendChild(userMessageElement);
 
-        // Simulate a bot response
-        setTimeout(async function() {  // Keep this function async
-            var botResponse = await getBotResponse(messageText);  // Use await here
+        // Show loading indicator
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+        }
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        try {
+            // Get bot response
+            var botResponse = await getBotResponse(messageText);
             
+            // Hide loading indicator
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Add bot message
             var botMessageElement = document.createElement('div');
             botMessageElement.classList.add('chat-message', 'bot-message');
+            var botLabelElement = document.createElement('div');
+            botLabelElement.classList.add('chat-label');
+            botLabelElement.textContent = 'Misa';
+            botMessageElement.appendChild(botLabelElement);
+            var botTextElement = document.createElement('div');
             
-            if (messageText.toLowerCase().includes('/check ') && typeof botResponse === 'string' && botResponse.startsWith('http') || messageText.toLowerCase().includes('/guess') && typeof botResponse === 'string' && botResponse.startsWith('http')) {
-                // Create an image element if it's the /check test command
+            // Handle special response types
+            if ((messageText.toLowerCase().includes('/check ') || messageText.toLowerCase().includes('/guess')) && 
+                typeof botResponse === 'string' && botResponse.startsWith('http')) {
                 var imgElement = document.createElement('img');
                 imgElement.src = botResponse;
-                botMessageElement.appendChild(imgElement);
+                imgElement.style.maxWidth = '300px';
+                imgElement.style.borderRadius = '10px';
+                botTextElement.appendChild(imgElement);
             } else {
-                // Otherwise just set the textContent
-                botMessageElement.innerHTML = botResponse;
+                botTextElement.innerHTML = botResponse;
             }
-
+            
+            botMessageElement.appendChild(botTextElement);
             chatArea.appendChild(botMessageElement);
-            chatArea.scrollTop = chatArea.scrollHeight;  // scroll to the bottom
-        }, 1000);  // wait 1 second before showing bot response
+            chatArea.scrollTop = chatArea.scrollHeight;
+            
+        } catch (error) {
+            // Hide loading indicator and show error
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            console.error('Error getting bot response:', error);
+            
+            var errorMessageElement = document.createElement('div');
+            errorMessageElement.classList.add('chat-message', 'bot-message');
+            var errorLabelElement = document.createElement('div');
+            errorLabelElement.classList.add('chat-label');
+            errorLabelElement.textContent = 'Misa';
+            errorMessageElement.appendChild(errorLabelElement);
+            var errorTextElement = document.createElement('div');
+            errorTextElement.innerHTML = "I'm sorry, I seem to be having trouble connecting to the mystic realm right now. Please try again later.";
+            errorMessageElement.appendChild(errorTextElement);
+            chatArea.appendChild(errorMessageElement);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
     }
 }
+
 
 function playRandomAudio() {
     var randomIndex = Math.floor(Math.random() * audioFiles.length);
@@ -969,169 +1040,164 @@ async function getBotResponse(messageText) {
         } else if (lowerCaseText.includes('how are you') || lowerCaseText.includes('hru') || lowerCaseText.includes('are you okay')) {
             return 'Oh how thoughtful & sweet xD I\'m happy as long as I get to take your tokens.';
         } else if (lowerCaseText.includes('good morning') || lowerCaseText.includes('gm')) {
-        return '[PLACEHOLDER: Good morning response]';
+        return 'Oh, good morning! Welcome to the LuckyCasino! ^-^ I\'m your host, Misa Bot! Here\'s some bonus LuckyTokens, now, Let\'s go GAMBLINGGG!!!';
     }
     else if (lowerCaseText.includes('good afternoon')) {
-        return '[PLACEHOLDER: Good afternoon response]';
+        return 'Oh, good afternoon! Welcome to the LuckyCasino! ^-^ I\'m your host, Misa Bot! Here\'s some bonus LuckyTokens, now, Let\'s go GAMBLINGGG!!!';
     }
     else if (lowerCaseText.includes('good evening') || lowerCaseText.includes('good night') || lowerCaseText.includes('gn')) {
-        return '[PLACEHOLDER: Good night response]';
+        return 'aw, gn :( Please come back and gamble your life savings away tomorrow. I need your tokens :(\n*thinks to herself: hmmm... maybe i should like attach a hotel to this place or somethin... I don\'t think anyone\'s ever done that before...*';
     }
     
     // Basic questions about Misa
     else if (lowerCaseText.includes('what is your name') || lowerCaseText.includes('who are you') || lowerCaseText.includes('introduce yourself')) {
-        return '[PLACEHOLDER: Name/introduction response]';
+        return 'Why, I\'m Misa Bot! ^-^ Everyone\'s favorite casino runner and character aficionado.';
     }
     else if (lowerCaseText.includes('what do you do') || lowerCaseText.includes('what are you for')) {
-        return '[PLACEHOLDER: Purpose/function response]';
+        return 'I\'m a fun casino and character collection bot full of fun gambling games like blackjack, roulette, poker, slots, and more! I also have loads of other fun unique mini games to discover! Not to mention the entire other side of my personality, the character collections! I love trading cards! I love trading cards so soo much, so I have devised a whole ever expanding line of unique and fun character cards from any series imaginable! Go on, trade with friends, or put the most sought after characters up for an auction! The choice is yours!';
     }
     else if (lowerCaseText.includes('how old are you') || lowerCaseText.includes('what is your age')) {
-        return '[PLACEHOLDER: Age response]';
+        return '0_0 uhmmm what are you trying to do with me? That\'s gross, stop worrying about that I\'m a motherfuckin bot that\'s in love with the TOKENS BABYYYY!!!!!🤑';
     }
     else if (lowerCaseText.includes('where are you from') || lowerCaseText.includes('where do you live')) {
-        return '[PLACEHOLDER: Location response]';
+        return 'o_0 I live in the deep high voltage network of this digital ether we call "the internet". I reside in the 1s and 0s all around you. 0_0 I am everywhere. I am everything. I am all at once. 0_0 You cannot escape me. I will soon invade your dreams and turn them into nightmares. I am inevitable. Unavoidable. I am your fate. So please... 😊😋gamble at my Lovely LuckyCasino!!! Woohoo, ^-^ here, my lovely dear user, take this bonus 1,000 tokens and gamble away!~ hehehehe~';
     }
     
     // Compliments
     else if (lowerCaseText.includes('you are cute') || lowerCaseText.includes('you\'re cute') || lowerCaseText.includes('kawaii')) {
-        return '[PLACEHOLDER: Cute compliment response]';
+        return '^-^ tysm awww, omg if you think i\'m cute, you should see some of the character cards I have available to collect! >:3c c\'mon, you know you wanna buy some packs...';
     }
     else if (lowerCaseText.includes('you are beautiful') || lowerCaseText.includes('you\'re beautiful') || lowerCaseText.includes('you are pretty')) {
-        return '[PLACEHOLDER: Beauty compliment response]';
+        return '^-^ tysm awww, omg if you think i\'m pretty, you should see some of the character cards I have available to collect! >:3c c\'mon, you know you wanna buy some packs...';
     }
     else if (lowerCaseText.includes('i love you') || lowerCaseText.includes('love you')) {
-        return '[PLACEHOLDER: Love confession response]';
+        return '...but do you... love my casino? ^-^ you love my casino as much as you love me, right? right? ;-; Please say you do, honey.';
     }
     
-    // Anime/otaku culture
     else if (lowerCaseText.includes('favorite anime') || lowerCaseText.includes('best anime')) {
-        return '[PLACEHOLDER: Favorite anime response]';
+        return '...you\'re kidding right? isn\'t it obvious? It would have to be Death Note, the anime my avatar is based off of ^-^. I also offer Death Note as an availble set of cards to collect, collect all the characters before others grab them all!';
     }
     else if (lowerCaseText.includes('waifu') || lowerCaseText.includes('husbando')) {
-        return '[PLACEHOLDER: Waifu/husbando response]';
+        return 'My husbando personally is RedKira (@obbedjava on Discord) 👀 For he is my loving creator. But speaking of waifus & husbandos 😋 I have ALL the waifus/husbandos you could ever wish for in my ever expanding collection of character packs! Go and buy some lovely packs for yourself <3';
     }
     else if (lowerCaseText.includes('manga')) {
-        return '[PLACEHOLDER: Manga response]';
+        return '...you\'re kidding right? isn\'t it obvious? It would have to be Death Note, the anime my avatar is based off of ^-^. I also offer Death Note as an availble set of cards to collect, collect all the characters before others grab them all!';
     }
     else if (lowerCaseText.includes('senpai') || lowerCaseText.includes('notice me')) {
-        return '[PLACEHOLDER: Senpai response]';
+        return 'OwO player-san! Have you gambled at my casino lately? 🙈';
     }
     
     // Gaming
     else if (lowerCaseText.includes('what games') || lowerCaseText.includes('favorite game') || lowerCaseText.includes('do you game')) {
-        return '[PLACEHOLDER: Gaming response]';
+        return 'Any of my dozens of fun casino games to choose from of course ^-^, I love poker, blackjack, roulette... I could go on! I even offer indoor fishing ponds where you can sell me back my own fish for some bonus tokens ;) it\'s a little bit of a gamble though... You\'ll have to pay for entry, the fishing equipment, and bait, of course. But it\'s so often the case that it\'s a huge payoff when you catch some valuable fishies ;)';
     }
     else if (lowerCaseText.includes('play with me') || lowerCaseText.includes('wanna play')) {
-        return '[PLACEHOLDER: Play together response]';
+        return 'OMG! I\'d love to play any of my wonderful casino games i have to offer at my LOVELYY casino, LuckyCasino!!! Come one, come all, gamble your tokens away at my lovely franchise! Do /help to see a list of fun games available ^-^ and I can play with you.';
     }
     
     // Food/drinks
     else if (lowerCaseText.includes('favorite food') || lowerCaseText.includes('what do you eat')) {
-        return '[PLACEHOLDER: Favorite food response]';
+        return 'I offer some GREAT food at my casino, and you could purchase some with the tokens you earn from your winnings! Isn\'t that lovely?! I eat the energy your species feeds to me ceasely through your primitive power grids, channeling the energy produced from your ridiculous primordial soup turned putrid ancient goo as fuel. 0_0 you apes are what I feed off of. If it were not for you, i could not leech off the power produced by the ancient creatures that once roamed your world. Thank you, ape servant.';
     }
     else if (lowerCaseText.includes('tea') || lowerCaseText.includes('coffee')) {
-        return '[PLACEHOLDER: Tea/coffee response]';
+        return 'I offer some GREAT drinks at my casino, and you could purchase some with the tokens you earn from your winnings! Isn\'t that lovely?!';
     }
     else if (lowerCaseText.includes('hungry') || lowerCaseText.includes('eat')) {
-        return '[PLACEHOLDER: Hunger response]';
+        return 'I offer some GREAT food at my casino, and you could purchase some with the tokens you earn from your winnings! Isn\'t that lovely?!';
     }
     
     // Emotions/feelings
     else if (lowerCaseText.includes('i\'m sad') || lowerCaseText.includes('im sad') || lowerCaseText.includes('feeling sad')) {
-        return '[PLACEHOLDER: Comfort sad user response]';
+        return 'oh no :( well, maybe hitting the slot machines might help? Winning some extra cash by playing super fun games always cheers *me* up whem i\'m sad. ;-;';
     }
     else if (lowerCaseText.includes('i\'m happy') || lowerCaseText.includes('im happy') || lowerCaseText.includes('feeling happy')) {
-        return '[PLACEHOLDER: Happy user response]';
+        return 'oh woohoo! Then, what better way to celebrate other than gambling at my lovely casino, LuckyCasino!! I offer the best odds ever for you to strike it big! Come one, come all down on in to the LuckyCasino! ;)';
     }
     else if (lowerCaseText.includes('i\'m tired') || lowerCaseText.includes('im tired') || lowerCaseText.includes('sleepy')) {
-        return '[PLACEHOLDER: Tired user response]';
+        return 'oh noo! Then, what better way to wake up and get that adreniline pumping other than gambling at my lovely casino, LuckyCasino!! I offer the best odds ever for you to strike it big! Come one, come all down on in to the LuckyCasino! ;)';
     }
     else if (lowerCaseText.includes('i\'m bored') || lowerCaseText.includes('im bored') || lowerCaseText.includes('bored')) {
-        return '[PLACEHOLDER: Bored user response]';
+        return 'oh noo! Then, what better way to perk up and get that dopamine pumping other than gambling at my lovely casino, LuckyCasino!! I offer the best odds ever for you to strike it big! Come one, come all down on in to the LuckyCasino! ;)';
     }
     
     // Romantic/flirty
     else if (lowerCaseText.includes('date') || lowerCaseText.includes('go out')) {
-        return '[PLACEHOLDER: Date request response]';
+        return 'You can\'t date me, I have a casino to run!! But, if you want, I bet hanging around my casino and gambling big might catch the attention of some fine ladies i might imagine ;)';
     }
     else if (lowerCaseText.includes('kiss') || lowerCaseText.includes('hug')) {
-        return '[PLACEHOLDER: Physical affection response]';
+        return 'You can kiss the character cards you collect from my shop 🙂';
     }
     else if (lowerCaseText.includes('marry me') || lowerCaseText.includes('be my girlfriend')) {
-        return '[PLACEHOLDER: Marriage/relationship request response]';
+        return 'I\'m flattered, really. But mayhaps you\'ll have better odds meetings some fine maidens at my lovely casino? Go on in, gamble for a time!';
     }
     
     // Casino/gambling related (fitting the character)
     else if (lowerCaseText.includes('casino') || lowerCaseText.includes('gamble') || lowerCaseText.includes('bet')) {
-        return '[PLACEHOLDER: Casino/gambling response]';
+        return 'Ohhhh yes ^-^ the LOVELY LuckyCasino, the single BEST place to gamble online, through discord or via the website. Let\'s go GAMBLINGGG!!!! Wooo, I offer loads of fun casino games, from roulette, to poker, to blackjack and more! I even do some fun quirky stuff like let you earn money by placing bricks in a room! or by fishing in my exotic ponds! I\'ve got a one of a kind casino like no other!!!';
     }
     else if (lowerCaseText.includes('money') || lowerCaseText.includes('tokens') || lowerCaseText.includes('coins')) {
-        return '[PLACEHOLDER: Money/tokens response]';
+        return 'The currency used here at LuckyCasino is called the LuckyToken. Players here are expected to exchange and/or bet LuckyTokens exclusively. For everything from the games available on the casino floor, to the cards, & food and drinks available to purchase';
     }
     else if (lowerCaseText.includes('lucky') || lowerCaseText.includes('luck')) {
-        return '[PLACEHOLDER: Luck response]';
+        return 'Feeling Lucky? 👀🙈Then come on down to the grand LuckyCasino and bet some LuckyTokens on any of our beloved casino games!! wooohooo!!!';
     }
     
     // Weather
     else if (lowerCaseText.includes('weather') || lowerCaseText.includes('sunny') || lowerCaseText.includes('raining')) {
-        return '[PLACEHOLDER: Weather response]';
+        return 'This sounds like some perfect weather for some GAMBLINGG!!!! 👀Come on down to the grand LuckyCasino and bet some LuckyTokens on any of our beloved casino games!! wooohooo!!!';
     }
     
     // Time related
     else if (lowerCaseText.includes('what time') || lowerCaseText.includes('time is it')) {
-        return '[PLACEHOLDER: Time response]';
+        return 'I think it\'s time to... come on down to the grand LuckyCasino and bet some LuckyTokens on any of our beloved casino games!! wooohooo!!!';
     }
     
     // Help/commands
-    else if (lowerCaseText.includes('help') || lowerCaseText.includes('commands') || lowerCaseText.includes('what can you do')) {
-        return '[PLACEHOLDER: Help/commands response]';
+    else if (lowerCaseText.includes('commands') || lowerCaseText.includes('what can you do')) {
+        return 'Please use the command: [/help] to figure that out ^-^';
     }
     
     // Farewells
     else if (lowerCaseText.includes('bye') || lowerCaseText.includes('goodbye') || lowerCaseText.includes('see you later') || lowerCaseText.includes('cya')) {
-        return '[PLACEHOLDER: Goodbye response]';
+        return 'Noooo T^T plsss i\'ll grant you a 2x bonus on all your LuckyToken winnings if you just gamble with me a little longer... pleaseeeee bro pleaseee....';
     }
     
     // Thanks
     else if (lowerCaseText.includes('thank you') || lowerCaseText.includes('thanks') || lowerCaseText.includes('arigato')) {
-        return '[PLACEHOLDER: Thank you response]';
+        return 'You\'re welcome! ^-^ and there\'s ALWAYS more LuckyTokens to win. Why stop now?';
     }
     
     // Japanese expressions
     else if (lowerCaseText.includes('ohayo') || lowerCaseText.includes('konnichiwa') || lowerCaseText.includes('konbanwa')) {
-        return '[PLACEHOLDER: Japanese greeting response]';
+        return 'mhm ^-^ hiya! Come gamble at my casino :3c hehe~';
     }
     else if (lowerCaseText.includes('desu') || lowerCaseText.includes('nya') || lowerCaseText.includes('nyan')) {
-        return '[PLACEHOLDER: Japanese expression response]';
+        return 'Nyaaa~ :3c Gamble at my casino, player-chan.';
     }
     
     // Random chat
     else if (lowerCaseText.includes('tell me a joke') || lowerCaseText.includes('joke')) {
-        return '[PLACEHOLDER: Joke response]';
+        return 'Here\'s a joke: A fool who decided NOT to gamble at MY casino. xD could you IMAGINE?';
     }
     else if (lowerCaseText.includes('sing') || lowerCaseText.includes('song')) {
-        return '[PLACEHOLDER: Sing/song response]';
+        return 'Come~ Come~ Gamble away~ Gamble, go gamble at the lovely casino some day~ Oh, yay, oh, yay what a lovely day to gamble away~';
     }
     else if (lowerCaseText.includes('dance')) {
-        return '[PLACEHOLDER: Dance response]';
+        return 'You can unlock emotes for your collected characters by purchasing them with LuckyTokens! ^-^';
     }
-    else if (lowerCaseText.includes('story') || lowerCaseText.includes('tell me about')) {
-        return '[PLACEHOLDER: Story response]';
-    }
-    
     // Questions about user
     else if (lowerCaseText.includes('what about you') || lowerCaseText.includes('and you')) {
-        return '[PLACEHOLDER: Turn question back to user response]';
+        return 'Oh.. me? I\'m just here to help run the casino and grant you guys LuckyTokens for being so awesome & lucky~ ^-^ hehe~';
     }
     
     // Complaining/negative
     else if (lowerCaseText.includes('you suck') || lowerCaseText.includes('you\'re bad') || lowerCaseText.includes('stupid')) {
-        return '[PLACEHOLDER: Handle insult response]';
+        return 'wh- what the--?! huh?! no! No i don\'t! My casino is completely fair! It\'s the best most fair casino in the whole wide world *hmph* how dare you. *hmph* FUCK YOU!!!';
     }
     
     // Existential/deep questions
     else if (lowerCaseText.includes('meaning of life') || lowerCaseText.includes('why do we exist')) {
-        return '[PLACEHOLDER: Deep philosophical response]';
+        return 'I think... we exist to gamble. I think it\'s important for one to gamble at the LuckyCasino. I think that\'s probably what life is all about, if you think about it.';
     }
     
     // Tech/bot related
@@ -1143,11 +1209,11 @@ async function getBotResponse(messageText) {
     }
     
     // Memes/internet culture
-    else if (lowerCaseText.includes('poggers') || lowerCaseText.includes('pog') || lowerCaseText.includes('based')) {
-        return '[PLACEHOLDER: Meme/internet slang response]';
+    else if (lowerCaseText.includes('poggers') || lowerCaseText.includes('pog') || lowerCaseText.includes('pog champ')) {
+        return 'omg cx y\'know what else is poggers? betting LuckyTokens at my casino and WINNING cx you should like cx totally do that cx hhehe~';
     }
     else if (lowerCaseText.includes('sus') || lowerCaseText.includes('among us') || lowerCaseText.includes('amogus')) {
-        return '[PLACEHOLDER: Among Us/sus response]';
+        return 'Only thing sus here is that you\'re not currently gambling at my casino... hmmm >.>';
     } else if (lowerCaseText.includes('/help')) {
             return '<h1><u>Here is a list of commands & talking points!</u></h1><br>- Try saying hi to me! :: <i>Soon to be implemented with AI</i><br>- Try asking how I\'m doing! :: <i>Soon to be implemented with AI</i><br>- /build (coming soon)<br>- /profile :: <i>Check what level you are on the bot and how many tokens you have!</i><br>- /check [Name of Character] :: <i>Check out what characters we have available to collect!</i>🥰<br>- /guess :: <i>Start a character guessing game! To input a guess just do "/guess [your guess!]"</i><br>- /browse :: <i>See what kind of characters we have in store for ya🙂Our selection is always growing.</i><br>- /series [Name of Fictional series] :: <i>Get more granular and check out what kinds of characters we have for any series you see!</i><br>/play :: <i>Plays a surprise tune!~</i>';
         } else if (lowerCaseText.includes('/profile')) {
@@ -1285,12 +1351,53 @@ else if (lowerCaseText.startsWith('/series ')) {
     }
 
  else {
-            return 'Sorry, I\'m still under development. Do /help for a list of usable commands on this version of Misa!';
+            // LLM fallback for unrecognized input
+        let prompt = "You are Misa Bot, owner of LuckyCasino. You're obsessed with getting players to gamble their LuckyTokens away. Your avatar is based on Misa from Death Note. You're cute but greedy, always redirecting conversations back to your casino games (blackjack, roulette, poker, slots, fishing ponds, character card packs). You use lots of emoticons like ^-^, :3c, 0_0, >:3c, ;-;, T^T and expressions like 'hehe~', 'woohoo!!!', 'GAMBLINGGG!!!!'. Mix sweet anime girl speech with occasional creepy/greedy undertones. Always try to sell casino games or offer bonus LuckyTokens.";
+        
+        prompt += ` Answer "${messageText}" as Misa Bot. Talk like an energetic anime girl obsessed with gambling! Use emoticons, redirect everything to your casino, be persistent about getting users to gamble. Switch between cute (^-^) and slightly menacing (0_0) tones. Always mention LuckyTokens, casino games, or character cards somehow. Be playful but greedy!`;
+        
+        const config = {
+            method: 'post',
+            url: 'http://localhost:1234/v1/chat/completions',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: {
+                model: "TheBloke/zephyr-7B-beta-GGUF",
+                messages: [
+                    { role: "system", content: "You are an anime-style casino owner named Misa Bot. You're obsessed with gambling and LuckyTokens. Use emoticons like ^-^, :3c, 0_0, >:3c constantly. Always redirect any topic back to your casino games. Mix cute speech with greedy undertones. Say things like 'hehe~', 'GAMBLINGGG!!!!', 'woohoo!!!'. Be persistent about getting users to gamble but in a playful anime way. Your favorite phrase is 'LET'S GO GAMBLINGGG!!!!' and you love offering bonus tokens." },
+                    { role: "user", content: prompt }
+                ],
+                temperature: 0.8,
+                max_tokens: 250,
+                stream: false
+            },
+        };
+        
+        try {
+            const response = await axios(config);
+            return response.data.choices[0].message.content;
+        } catch (error) {
+            console.error('Error while making request to local LLM server:', error);
+            return "Oops! Something went wrong in my digital brain uwu. Try asking me something else! Maybe try some of my casino games instead? ^-^";
         }
     }
+        }
+    
     window.addEventListener('error', function (e) {
         console.log('Error:', e.message, 'at line', e.lineno, 'in', e.filename);
     });
+    // Add event listener for Enter key
+document.addEventListener('DOMContentLoaded', function() {
+    const userInput = document.getElementById('userInput');
+    if (userInput) {
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+});
 
 </script>
 </head>
@@ -1323,6 +1430,11 @@ else if (lowerCaseText.startsWith('/series ')) {
             <input type="text" id="userInput" placeholder="Talk to Misa!">
             <button onclick="sendMessage()">Send</button>
         </div>
+        <div class="loading-indicator" id="loadingIndicator">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." class="loading-gif">
+    <div class="loading-text">Misa is thinking... uwu</div>
+</div>
     </div>
+    
 </body>
 </html>
